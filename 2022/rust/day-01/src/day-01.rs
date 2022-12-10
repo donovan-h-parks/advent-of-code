@@ -1,3 +1,4 @@
+use itertools::Itertools;
 use std::fs;
 
 /// Determine maximum number of calories carried by an elf.
@@ -15,21 +16,16 @@ fn part1(data: &str) -> u32 {
 
 /// Determine number of calories carried by 3 elves carrying the most calories.
 fn part2(data: &str) -> u32 {
-    // determine number of calories carried by each elf
-    let mut calories: Vec<u32> = data
-        .split("\n\n")
+    data.split("\n\n")
         .map(|elf_load| {
             elf_load
                 .split_terminator('\n')
                 .map(|item| item.parse::<u32>().unwrap())
-                .sum()
+                .sum::<u32>()
         })
-        .collect();
-
-    // sort calories in descending order
-    calories.sort_by(|a, b| b.cmp(a));
-
-    calories.iter().take(3).sum()
+        .sorted_by(|a, b| b.cmp(a))
+        .take(3)
+        .sum()
 }
 
 fn main() {
