@@ -8,6 +8,7 @@ from dataclasses import dataclass
 START = 'S'
 END = 'E'
 
+
 @dataclass
 class Node:
     x: int
@@ -29,7 +30,7 @@ def get_height(node: Node, height_map: List[str]):
 def breadth_first_search(node: Node, height_map: List[str]) -> Node:
     """Perform breadth first search to destination."""
 
-    width= len(height_map[0])
+    width = len(height_map[0])
     height = len(height_map)
 
     stack = deque([node])
@@ -41,7 +42,7 @@ def breadth_first_search(node: Node, height_map: List[str]) -> Node:
             return cur_node
 
         cur_height = get_height(cur_node, height_map)
-        for dx, dy in ((1,0), (-1,0), (0,1), (0,-1)):
+        for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
             x = cur_node.x - dx
             y = cur_node.y - dy
             dest_node = Node(x, y, cur_node.num_steps+1)

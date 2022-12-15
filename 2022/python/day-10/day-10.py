@@ -25,7 +25,7 @@ def part1(input_file: str) -> int:
 
             # increment clock cycle for instruction and track
             # sum signal strength at 20, 60, 100, 140, ...
-            for _  in range(CPU_CYCLES[instruction]):
+            for _ in range(CPU_CYCLES[instruction]):
                 cycle += 1
                 if (cycle - 20) % 40 == 0:
                     signal_strength += cycle*registerX
@@ -53,7 +53,7 @@ def part2(input_file: str) -> List[str]:
 
             # increment clock cycle for instruction and track
             # sum signal strength at 20, 60, 100, 140, ...
-            for _  in range(CPU_CYCLES[instruction]):
+            for _ in range(CPU_CYCLES[instruction]):
                 col = cycle % CRT_WIDTH
                 row = cycle//CRT_WIDTH
 
