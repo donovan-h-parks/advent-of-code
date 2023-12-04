@@ -9,7 +9,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn adjacent_gear(map: &Vec<&str>, row_num: usize, col_num: usize) -> Option<(usize, usize)> {
+fn adjacent_gear(map: &Vec<Vec<char>>, row_num: usize, col_num: usize) -> Option<(usize, usize)> {
     let mut row_min = 0;
     if row_num > 1 {
         row_min = row_num - 1;
@@ -22,11 +22,8 @@ fn adjacent_gear(map: &Vec<&str>, row_num: usize, col_num: usize) -> Option<(usi
 
     for r in row_min..=(row_num + 1) {
         for c in col_min..=(col_num + 1) {
-            if r < map.len() && c < map[0].len() {
-                let test_ch = map[r].chars().nth(c).unwrap_or('.');
-                if test_ch == '*' {
-                    return Some((c, r));
-                }
+            if r < map.len() && c < map[0].len() && map[r][c] == '*' {
+                return Some((c, r));
             }
         }
     }
@@ -43,14 +40,14 @@ struct Part {
 }
 
 pub fn process(input: &str) -> Result<String> {
-    let map: Vec<_> = input.lines().collect();
-    let mut gears = Vec::new();
+    let map: Vec<Vec<char>> = input.lines().map(|line| line.chars().collect()).collect();
 
+    let mut gears = Vec::new();
     for (row_num, row) in map.iter().enumerate() {
         let mut cur_part = Part::default();
-        for (col_num, ch) in row.chars().enumerate() {
+        for (col_num, ch) in row.iter().enumerate() {
             if ch.is_ascii_digit() {
-                cur_part.value.push(ch);
+                cur_part.value.push(*ch);
                 if let Some((gear_row, gear_col)) = adjacent_gear(&map, row_num, col_num) {
                     cur_part.is_gear = true;
                     cur_part.row = gear_row;

@@ -8,7 +8,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn adjacent_symbol(map: &Vec<&str>, row_num: usize, col_num: usize) -> bool {
+fn adjacent_symbol(map: &Vec<Vec<char>>, row_num: usize, col_num: usize) -> bool {
     let mut row_min = 0;
     if row_num > 1 {
         row_min = row_num - 1;
@@ -21,11 +21,9 @@ fn adjacent_symbol(map: &Vec<&str>, row_num: usize, col_num: usize) -> bool {
 
     for r in row_min..=(row_num + 1) {
         for c in col_min..=(col_num + 1) {
-            if r < map.len() && c < map[0].len() {
-                let test_ch = map[r].chars().nth(c).unwrap_or('.');
-                if !test_ch.is_ascii_digit() && test_ch != '.' {
-                    return true;
-                }
+            if r < map.len() && c < map[0].len() && !map[r][c].is_ascii_digit() && map[r][c] != '.'
+            {
+                return true;
             }
         }
     }
@@ -36,19 +34,19 @@ fn adjacent_symbol(map: &Vec<&str>, row_num: usize, col_num: usize) -> bool {
 pub fn process(input: &str) -> Result<String> {
     let mut answer: u64 = 0;
 
-    let map: Vec<_> = input.lines().collect();
+    let map: Vec<Vec<char>> = input.lines().map(|line| line.chars().collect()).collect();
 
     for (row_num, row) in map.iter().enumerate() {
         let mut is_part = false;
         let mut part_num = String::default();
-        for (col_num, ch) in row.chars().enumerate() {
+        for (col_num, ch) in row.iter().enumerate() {
             if ch.is_ascii_digit() {
-                part_num.push(ch);
+                part_num.push(*ch);
                 if adjacent_symbol(&map, row_num, col_num) {
                     is_part = true;
                 }
             } else {
-                if !part_num.is_empty() && is_part {
+                if is_part {
                     answer += part_num.parse::<u64>()?;
                 }
 
@@ -57,7 +55,7 @@ pub fn process(input: &str) -> Result<String> {
             }
         }
 
-        if !part_num.is_empty() && is_part {
+        if is_part {
             answer += part_num.parse::<u64>()?;
         }
     }
